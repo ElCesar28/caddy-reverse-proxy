@@ -6,31 +6,31 @@
 
 :{$PORT} {
     
-    # --- SERVICIO 1 ---
+    # ----Frontend convention.wbcboxing.com-----
     @front1 host {$FRONT1_DOMAIN}
     handle @front1 {
         reverse_proxy {$FRONT1_HOST}
     }
 
-    # --- SERVICIO 2 ---
+    # --- Frontend george-foreman.wbcboxing.com ---
     @front2 host {$FRONT2_DOMAIN}
     handle @front2 {
         reverse_proxy {$FRONT2_HOST}
     }
 
-    # --- SERVICIO 3 ---
+    # --- Frontend registration.wbcboxing.com ---
     @front3 host {$FRONT3_DOMAIN}
     handle @front3 {
         reverse_proxy {$FRONT3_HOST}
     }
 
-    # --- SERVICIO 4 ---
+    # --- Frontend summit.wbcboxing.com ---
     @front4 host {$FRONT4_DOMAIN}
     handle @front4 {
         reverse_proxy {$FRONT4_HOST}
     }
 
-    # --- BACKEND ---
+    # --- BACKEND api.wbcboxing.com ---
     @back host {$BACK_DOMAIN}
     handle @back {
         reverse_proxy {$BACK_HOST}
