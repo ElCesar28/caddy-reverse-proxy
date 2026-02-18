@@ -1,6 +1,4 @@
 {
-    # Railway maneja el certificado SSL antes de llegar aquí, 
-    # así que apagamos el de Caddy para evitar conflictos.
     auto_https off
     admin off
     persist_config off
@@ -8,39 +6,38 @@
 
 :{$PORT} {
     
-    # 1. FRONTEND: Convention
-    @convention host convention.wbcboxing.com
-    handle @convention {
-        reverse_proxy wbc-convention-front.railway.internal:8080
+    # --- SERVICIO 1 ---
+    @front1 host {$FRONT1_DOMAIN}
+    handle @front1 {
+        reverse_proxy {$FRONT1_HOST}
     }
 
-    # 2. FRONTEND: Blog (George Foreman)
-    @blog host george-foreman.wbcboxing.com
-    handle @blog {
-        reverse_proxy wbc-memorandum-blog.railway.internal:8080
+    # --- SERVICIO 2 ---
+    @front2 host {$FRONT2_DOMAIN}
+    handle @front2 {
+        reverse_proxy {$FRONT2_HOST}
     }
 
-    # 3. FRONTEND: Registration
-    @registration host registration.wbcboxing.com
-    handle @registration {
-        reverse_proxy WBC-registration-front.railway.internal:8080
+    # --- SERVICIO 3 ---
+    @front3 host {$FRONT3_DOMAIN}
+    handle @front3 {
+        reverse_proxy {$FRONT3_HOST}
     }
 
-    # 4. FRONTEND: Summit
-    @summit host summit.wbcboxing.com
-    handle @summit {
-        reverse_proxy summit-front.railway.internal:8080
+    # --- SERVICIO 4 ---
+    @front4 host {$FRONT4_DOMAIN}
+    handle @front4 {
+        reverse_proxy {$FRONT4_HOST}
     }
 
-    # 5. BACKEND API
-    # Ajusta este dominio al que uses para tu API (ej: api.wbcboxing.com o registration.api...)
-    @api host api.wbcboxing.com
-    handle @api {
-        reverse_proxy WBC-registration-back.railway.internal:8080
+    # --- BACKEND ---
+    @back host {$BACK_DOMAIN}
+    handle @back {
+        reverse_proxy {$BACK_HOST}
     }
 
-    # Health Check / Default
+    # --- Default ---
     handle {
-        respond "Caddy Proxy en Railway funcionando correctamente. Revisa tu dominio." 200
+        respond "Proxy Configurado con Variables. Revisa tus settings en Railway." 200
     }
 }
