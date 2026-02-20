@@ -1,43 +1,121 @@
+# global options
 {
-    auto_https off
     admin off
     persist_config off
+    auto_https off
+
+    log {
+        format json
+    }
+
+    servers {
+        trusted_proxies static private_ranges
+    }
+}
+
+(lb_settings) {
+    lb_policy round_robin
+    lb_retries 100
+    lb_try_duration 10s
+    lb_try_interval 250ms
+}
+
+(passive_health_checks) {
+    fail_duration 60s
+    max_fails 300
+    unhealthy_latency 5s
+    unhealthy_request_count 200
+}
+
+(proxy_common) {
+    import lb_settings
+    import passive_health_checks
+
+    # Yo recomiendo conservar el Host ORIGINAL (útil para Django ALLOWED_HOSTS y frontends SSR)
+    # Si te da problemas por alguna razón, lo ajustamos.
+    header_up Host {http.request.host}
 }
 
 :{$PORT} {
-    
-    # ----Frontend convention.wbcboxing.com-----
-    @front1 host {$FRONT1_DOMAIN}
-    handle @front1 {
-        reverse_proxy {$FRONT1_HOST}
+    log { format json }
+
+    # ---------- FRONT 1 ----------
+    @frontend_1 host {$FRONTEND_1_DOMAIN}
+    handle @frontend_1 {
+        reverse_proxy {
+            dynamic a {
+                name {$FRONTEND_1_UPSTREAM_DOMAIN}
+                port {$FRONTEND_1_UPSTREAM_PORT}
+                refresh 1s
+                dial_timeout 30s
+                versions ipv4 ipv6
+            }
+            import proxy_common
+        }
     }
 
-    # --- Frontend george-foreman.wbcboxing.com ---
-    @front2 host {$FRONT2_DOMAIN}
-    handle @front2 {
-        reverse_proxy {$FRONT2_HOST}
+    # ---------- FRONT 2 ----------
+    @frontend_2 host {$FRONTEND_2_DOMAIN}
+    handle @frontend_2 {
+        reverse_proxy {
+            dynamic a {
+                name {$FRONTEND_2_UPSTREAM_DOMAIN}
+                port {$FRONTEND_2_UPSTREAM_PORT}
+                refresh 1s
+                dial_timeout 30s
+                versions ipv4 ipv6
+            }
+            import proxy_common
+        }
     }
 
-    # --- Frontend registration.wbcboxing.com ---
-    @front3 host {$FRONT3_DOMAIN}
-    handle @front3 {
-        reverse_proxy {$FRONT3_HOST}
+    # ---------- FRONT 3 ----------
+    @frontend_3 host {$FRONTEND_3_DOMAIN}
+    handle @frontend_3 {
+        reverse_proxy {
+            dynamic a {
+                name {$FRONTEND_3_UPSTREAM_DOMAIN}
+                port {$FRONTEND_3_UPSTREAM_PORT}
+                refresh 1s
+                dial_timeout 30s
+                versions ipv4 ipv6
+            }
+            import proxy_common
+        }
     }
 
-    # --- Frontend summit.wbcboxing.com ---
-    @front4 host {$FRONT4_DOMAIN}
-    handle @front4 {
-        reverse_proxy {$FRONT4_HOST}
+    # ---------- FRONT 4 ----------
+    @frontend_4 host {$FRONTEND_4_DOMAIN}
+    handle @frontend_4 {
+        reverse_proxy {
+            dynamic a {
+                name {$FRONTEND_4_UPSTREAM_DOMAIN}
+                port {$FRONTEND_4_UPSTREAM_PORT}
+                refresh 1s
+                dial_timeout 30s
+                versions ipv4 ipv6
+            }
+            import proxy_common
+        }
     }
 
-    # --- BACKEND api.wbcboxing.com ---
-    @back host {$BACK_DOMAIN}
-    handle @back {
-        reverse_proxy {$BACK_HOST}
+    # ---------- BACKEND ----------
+    @backend host {$BACK_DOMAIN}
+    handle @backend {
+        reverse_proxy {
+            dynamic a {
+                name {$BACK_UPSTREAM_DOMAIN}
+                port {$BACK_UPSTREAM_PORT}
+                refresh 1s
+                dial_timeout 30s
+                versions ipv4 ipv6
+            }
+            import proxy_common
+        }
     }
 
-    # --- Default ---
+    # ---------- DEFAULT ----------
     handle {
-        respond "Proxy Configurado con Variables. Revisa tus settings en Railway." 200
+        respond "Proxy configurado. Revisa variables en Railway." 200
     }
 }
