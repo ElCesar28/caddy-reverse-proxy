@@ -100,12 +100,12 @@
     # }
 
     # ---------- BACKEND ----------
-    @backend host {$BACK_DOMAIN}
+    @backend host {$BACKEND_DOMAIN}
     handle @backend {
         reverse_proxy {
             dynamic a {
-                name {$BACK_UPSTREAM_DOMAIN}
-                port {$BACK_UPSTREAM_PORT}
+                name {$BACKEND_UPSTREAM_DOMAIN}
+                port {$BACKEND_UPSTREAM_PORT}
                 refresh 1s
                 dial_timeout 30s
                 versions ipv4 ipv6
