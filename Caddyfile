@@ -70,34 +70,34 @@
     }
 
     # ---------- FRONT 3 ----------
-    @frontend_3 host {$FRONTEND_3_DOMAIN}
-    handle @frontend_3 {
-        reverse_proxy {
-            dynamic a {
-                name {$FRONTEND_3_UPSTREAM_DOMAIN}
-                port {$FRONTEND_3_UPSTREAM_PORT}
-                refresh 1s
-                dial_timeout 30s
-                versions ipv4 ipv6
-            }
-            import proxy_common
-        }
-    }
+    # @frontend_3 host {$FRONTEND_3_DOMAIN}
+    # handle @frontend_3 {
+    #     reverse_proxy {
+    #         dynamic a {
+    #             name {$FRONTEND_3_UPSTREAM_DOMAIN}
+    #             port {$FRONTEND_3_UPSTREAM_PORT}
+    #             refresh 1s
+    #             dial_timeout 30s
+    #             versions ipv4 ipv6
+    #         }
+    #         import proxy_common
+    #     }
+    # }
 
     # ---------- FRONT 4 ----------
-    @frontend_4 host {$FRONTEND_4_DOMAIN}
-    handle @frontend_4 {
-        reverse_proxy {
-            dynamic a {
-                name {$FRONTEND_4_UPSTREAM_DOMAIN}
-                port {$FRONTEND_4_UPSTREAM_PORT}
-                refresh 1s
-                dial_timeout 30s
-                versions ipv4 ipv6
-            }
-            import proxy_common
-        }
-    }
+    # @frontend_4 host {$FRONTEND_4_DOMAIN}
+    # handle @frontend_4 {
+    #     reverse_proxy {
+    #         dynamic a {
+    #             name {$FRONTEND_4_UPSTREAM_DOMAIN}
+    #             port {$FRONTEND_4_UPSTREAM_PORT}
+    #             refresh 1s
+    #             dial_timeout 30s
+    #             versions ipv4 ipv6
+    #         }
+    #         import proxy_common
+    #     }
+    # }
 
     # ---------- BACKEND ----------
     @backend host {$BACK_DOMAIN}
