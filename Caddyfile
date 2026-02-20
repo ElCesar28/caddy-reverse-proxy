@@ -37,9 +37,10 @@
 }
 
 :{$PORT} {
-    log { format json }
+    log { 
+        format json
+    }
 
-    # ---------- FRONT 1 ----------
     @frontend_1 host {$FRONTEND_1_DOMAIN}
     handle @frontend_1 {
         reverse_proxy {
@@ -54,7 +55,6 @@
         }
     }
 
-    # ---------- FRONT 2 ----------
     @frontend_2 host {$FRONTEND_2_DOMAIN}
     handle @frontend_2 {
         reverse_proxy {
@@ -69,37 +69,6 @@
         }
     }
 
-    # ---------- FRONT 3 ----------
-    # @frontend_3 host {$FRONTEND_3_DOMAIN}
-    # handle @frontend_3 {
-    #     reverse_proxy {
-    #         dynamic a {
-    #             name {$FRONTEND_3_UPSTREAM_DOMAIN}
-    #             port {$FRONTEND_3_UPSTREAM_PORT}
-    #             refresh 1s
-    #             dial_timeout 30s
-    #             versions ipv4 ipv6
-    #         }
-    #         import proxy_common
-    #     }
-    # }
-
-    # ---------- FRONT 4 ----------
-    # @frontend_4 host {$FRONTEND_4_DOMAIN}
-    # handle @frontend_4 {
-    #     reverse_proxy {
-    #         dynamic a {
-    #             name {$FRONTEND_4_UPSTREAM_DOMAIN}
-    #             port {$FRONTEND_4_UPSTREAM_PORT}
-    #             refresh 1s
-    #             dial_timeout 30s
-    #             versions ipv4 ipv6
-    #         }
-    #         import proxy_common
-    #     }
-    # }
-
-    # ---------- BACKEND ----------
     @backend host {$BACKEND_DOMAIN}
     handle @backend {
         reverse_proxy {
@@ -114,7 +83,6 @@
         }
     }
 
-    # ---------- DEFAULT ----------
     handle {
         respond "Proxy configurado. Revisa variables en Railway." 200
     }
