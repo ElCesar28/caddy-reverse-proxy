@@ -37,6 +37,7 @@
 }
 
 :{$PORT} {
+encode zstd gzip
     log { 
         format json
     }
